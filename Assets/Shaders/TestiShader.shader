@@ -29,13 +29,14 @@ Shader "Custom/TestiShader"
             struct Attributes
             {
                 float3 positionOS : POSITION;
-                float3 normalOS : NORMAL;
+                half3 normalOS : NORMAL;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
                 float3 positionWS : TEXCOORD0;
+                half3 normalOS : TEXCOORD1;
             };
 
             CBUFFER_START(UnityPerMaterial)
@@ -49,13 +50,16 @@ Shader "Custom/TestiShader"
 
                 output.positionHCS = TransformObjectToHClip(input.positionOS);
                 output.positionWS = TransformObjectToWorld(input.positionOS);
-
+                output.normalOS = TransformObjectToWorldNormal(input.normalOS);
                 return output;
             }
 
             half4 Frag(const Varyings input) : SV_TARGET
             {
-                return _Color * clamp(input.positionWS.x,0,1 );
+                half4 color = 0;
+                color.rgb = input.normalOS * 0.5 + 0.5;
+                return color;
+                //return _Color * clamp(input.positionWS.x,0,1 );
                 
             }
             ENDHLSL
