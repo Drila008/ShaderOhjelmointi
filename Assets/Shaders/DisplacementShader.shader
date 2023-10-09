@@ -3,6 +3,8 @@ Shader "Custom/TestiShader"
     Properties
     {
         _Color ("Coloriii", Color) = (1,1,1,1)
+        [KeywordEnum(Local, World, View)]
+        _ModeKeyword("Mode", float) = 0
     }
     SubShader
     {
@@ -24,6 +26,8 @@ Shader "Custom/TestiShader"
             #pragma vertex Vert
             #pragma fragment Frag
 
+            #pragma multi_compile_vertex _MODEKEYWORD_LOCAL _MODEKEYWORD_WORLD _MODEKEYWORD_VIEW
+            
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/core.hlsl"
 
             struct Attributes
@@ -47,16 +51,38 @@ Shader "Custom/TestiShader"
             Varyings Vert(const Attributes input)
             {
                 Varyings output;
-                output.positionHCS = mul(UNITY_MATRIX_P, mul(UNITY_MATRIX_V, mul(UNITY_MATRIX_M, float4(input.positionOS, 1))));
-                //output.positionHCS = TransformObjectToHClip(input.positionOS);
-                //output.positionWS = TransformObjectToWorld(input.positionOS);
-                //output.normalOS = TransformObjectToWorldNormal(input.normalOS);
-                output.positionWS = mul(UNITY_MATRIX_M, input.positionOS);
 
-                //const float3 os = mul(UNITY_MATRIX_I_M, output.positionWS); // back to object space, inverse matrix
+            
                 
+                float3 newPosition = input.positionOS;
+                newPosition.y += 1;
+
+                #if _MODEKEYWORD_LOCAL
+                newPosition = input.positionOS;
+                newPosition.y += 1.0;
+                output.positionHCS = mul(UNITY_MATRIX_P, mul(UNITY_MATRIX_V, mul(UNITY_MATRIX_M, float4(newPosition, 1))));
+                //output.positionHCS = newPosition;
+                
+                #elif _MODEKEYWORD_WORLD
+                // newPosition = mul(UNITY_MATRIX_M, float4(input.positionOS, 1)).xyz;
+                // newPosition.y += 1.0;
+                // output.positionWS = newPosition;
+
+                
+                #elif _MODEKEYWORD_VIEW
+                newPosition = mul(UNITY_MATRIX_M, float4(input.positionOS, 1)).xyz;
+                newPosition.y += 1.0;
+                #endif
+
+                
+                //output.positionWS = newPosition;
+                output.normalOS = input.normalOS;
+
                 return output;
             }
+
+
+
 
             half4 Frag(const Varyings input) : SV_TARGET
             {
