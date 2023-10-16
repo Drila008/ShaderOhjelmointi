@@ -3,7 +3,7 @@ Shader "Custom/BlinnPhong"
     Properties
     {
         _Color ("Colori", Color) = (1,1,1,1)
-        _Metallic("Metallic", float) = 1
+        _Metallic("Metallic", Range(1,512)) = 1
     }
     SubShader
     {

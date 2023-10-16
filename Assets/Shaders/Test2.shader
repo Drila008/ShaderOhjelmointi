@@ -25,7 +25,8 @@ Shader "Custom/Test2"
             #pragma shader_feature_local_fragment _COLORKEYWORD_RED _COLORKEYWORD_GREEN _COLORKEYWORD_BLUE _COLORKEYWORD_BLACK
             #pragma shader_feature_local_vertex _MODEKEYWORD_LOCAL _MODEKEYWORD_WORLD _MODEKEYWORD_VIEW
             
-            float4 Vertex(float3 positionOS : POSITION) : SV_POSITION {
+            float4 Vertex(float3 positionOS : POSITION) : SV_POSITION
+            {
             
             float4 positionHCS;
 

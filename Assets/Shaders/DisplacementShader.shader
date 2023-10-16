@@ -1,4 +1,4 @@
-Shader "Custom/TestiShader"
+Shader "Custom/DisplacementShader"
 {
     Properties
     {
