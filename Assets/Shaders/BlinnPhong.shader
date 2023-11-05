@@ -59,8 +59,6 @@ Shader "Custom/BlinnPhong"
 
             half4 BlinnPhong(Varyings input)
             {
-                
-                
                 Light l  = GetMainLight();
                 half3 amb = 0.1*l.color;
                 half3 diffuse = saturate(dot(input.normalWS, l.direction)) * l.color;
@@ -68,7 +66,6 @@ Shader "Custom/BlinnPhong"
                 half3 halfvector = normalize(l.direction + dir);
                 half3 spec = pow(saturate(dot(input.normalWS, halfvector)),_Metallic) * l.color;
                 return float4((amb + diffuse + spec) * _Color, 1);
-                
             }
 
             half4 Frag(const Varyings input) : SV_TARGET
