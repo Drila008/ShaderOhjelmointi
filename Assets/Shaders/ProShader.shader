@@ -9,7 +9,7 @@ Shader "Custom/ProShader"
         [NoScaleOffset] _OcclusionMap("Ambient Occlusion Map", 2D) = "white" { }
         [NoScaleOffset] _MetallicMap("Metallic Map", 2D) = "black" { }
         [NoScaleOffset] _ParallaxMap ("Parallax Map", 2D) = "black" { }
-        _ParallaxStrength ("Parallax Strength", Range(0, 1)) = 0
+        _ParallaxStrength ("Parallax Strength", Range(-100, 100)) = 0
     }
     SubShader
     {
@@ -91,7 +91,6 @@ Shader "Custom/ProShader"
                 float4 _MainTex_ST;
                 float4 _NormalMap_ST;
                 float4 _BaseColor;
-                float _Metallic;
                 float _ParallaxStrength;
             CBUFFER_END
 
@@ -118,7 +117,7 @@ Shader "Custom/ProShader"
                 half3 viewDirTS : TEXCOORD5;
                 DECLARE_LIGHTMAP_OR_SH(staticLightmapUV, sh, 6);
                 #if defined(DYNAMICLIGHTMAP_ON)
-    float2  dynamicLightmapUV : TEXCOORD7;
+                float2  dynamicLightmapUV : TEXCOORD7;
                 #endif
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
