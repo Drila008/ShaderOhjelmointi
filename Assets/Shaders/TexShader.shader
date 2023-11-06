@@ -68,10 +68,11 @@ Shader "Custom/TexShader"
             {
                 Varyings output;
                 // output.positionHCS = TransformObjectToHClip(input.positionOS);
-                // output.positionWS = TransformObjectToWorld(input.positionOS);
+                output.positionWS = TransformObjectToWorld(input.positionOS);
         
                 VertexPositionInputs vin = GetVertexPositionInputs(input.positionOS);
                 VertexNormalInputs vnorm = GetVertexNormalInputs(input.normalOS, input.tangentOS);
+                
                 output.positionHCS = vin.positionCS;
                 output.normalWS = vnorm.normalWS;
                 output.tangentWS = vnorm.tangentWS;
